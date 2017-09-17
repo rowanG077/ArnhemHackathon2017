@@ -10,19 +10,33 @@ namespace Assets
 	public class CoordinateCalculator
 	{
 		private Coordinate Me;
+		private Coordinate NorthPole;
 
 		public DateTime ReferenceTime { get; set; }
 
 		public CoordinateCalculator(double latitude, double longitude, double height, DateTime referenceTime) {
 			this.ReferenceTime = referenceTime;
 			this.SetNewPosition(latitude, longitude, height);
+			this.NorthPole = new Coordinate(80.37, -72.62, 10);
+		}
+
+		private Point3d CalculatePosition(Coordinate coordinate, DateTime time) {
+			return coordinate.toECI(new EpochTime(time).getLocalSiderealTime(coordinate.getLongitude()));
 		}
 
 		public void SetNewPosition(double latitude, double longitude, double height) {
 			this.Me = new Coordinate(latitude, longitude, height);
 		}
 
-		public List<SurfaceSgp4Pair> GetCoordinates(Tle satalite, DateTime from, DateTime to, int resolution) {
+		public Point3d GetMePosition(DateTime time) {
+			return CalculatePosition(this.Me, time);
+		}
+
+		public Point3d GetNorthPolePosition(DateTime time) {
+			return CalculatePosition(this.NorthPole, time);
+		}
+
+		public List<SurfaceSgp4Pair> GetCoordinatePairs(Tle satalite, DateTime from, DateTime to, int resolution) {
 			Sgp4 sgp4Propagator = new Sgp4(satalite, 1);
 
 			var epochFrom = new EpochTime(from);
@@ -39,7 +53,7 @@ namespace Assets
 					{
 						TimePointUtc = time,
 						SatalitePoint = sgp,
-						SurfacePoint = this.Me.toECI(new EpochTime(time).getLocalSiderealTime(this.Me.getLongitude()))
+						SurfacePoint = this.GetMePosition(time)
 					};
 				})
 				.ToList();
@@ -47,8 +61,8 @@ namespace Assets
 			return results;
 		}
 
-		public SurfaceSgp4Pair GetCurrentCoordinates(Tle satalite) {
-			return this.GetCoordinates(satalite, this.ReferenceTime, this.ReferenceTime.AddSeconds(1), 1).First();
+		public SurfaceSgp4Pair GetCurrentCoordinatePair(Tle satalite) {
+			return this.GetCoordinatePairs(satalite, this.ReferenceTime, this.ReferenceTime.AddSeconds(1), 1).First();
 		}
 
 		

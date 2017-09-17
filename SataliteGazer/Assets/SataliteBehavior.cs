@@ -13,7 +13,7 @@ public class SataliteBehavior : MonoBehaviour {
 
 	private void UpdateCoordinates()
 	{
-		var point = this.Calculator.GetCurrentCoordinates(this.TLeData);
+		var point = this.Calculator.GetCurrentCoordinatePair(this.TLeData);
 
 		Vector3 sataliteLocation = new Vector3((float)point.SatalitePoint.getPositonData().x, (float)point.SatalitePoint.getPositonData().y, (float)point.SatalitePoint.getPositonData().z);
 		this.gameObject.transform.localPosition = sataliteLocation;
@@ -21,7 +21,7 @@ public class SataliteBehavior : MonoBehaviour {
 
 	private void DrawFlightLine(DateTime from, DateTime to)
 	{
-		var points = this.Calculator.GetCoordinates(this.TLeData, from, to, 360)
+		var points = this.Calculator.GetCoordinatePairs(this.TLeData, from, to, 60)
 			.Select(p => p.SatalitePoint)
 			.Select(p => new Vector3((float)p.getX(), (float)p.getY(), (float)p.getZ()))
 			.Select(v => this.gameObject.transform.parent.TransformPoint(v))
@@ -43,7 +43,7 @@ public class SataliteBehavior : MonoBehaviour {
 	void Update () {
 		this.UpdateCoordinates();
 		if (this.LineRenderer.enabled == true) {
-			var halfOrbitalTimeDays = TimeSpan.FromDays(1 / this.TLeData.getMeanMotion());
+			var halfOrbitalTimeDays = TimeSpan.FromDays(0.5 / this.TLeData.getMeanMotion());
 			this.DrawFlightLine(this.Calculator.ReferenceTime - halfOrbitalTimeDays, this.Calculator.ReferenceTime + halfOrbitalTimeDays);
 		}
 	}

@@ -85,6 +85,7 @@
     <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\Models\SataliteGameObject.cs" />
     <Compile Include="Assets\Models\SurfaceSgp4Pair.cs" />
+    <Compile Include="Assets\NorthPoleBehavior.cs" />
     <Compile Include="Assets\One_Sgp4\Coordinate.cs" />
     <Compile Include="Assets\One_Sgp4\DeepSpaceObjects.cs" />
     <Compile Include="Assets\One_Sgp4\Enum.cs" />
