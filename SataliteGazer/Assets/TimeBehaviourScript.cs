@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets;
 
-public class DatehaviourScript : MonoBehaviour {
+public class TimeBehaviourScript : MonoBehaviour {
 	private CoordinateCalculator mainCalculator;
 	private Text txtDate;
 
@@ -13,10 +13,10 @@ public class DatehaviourScript : MonoBehaviour {
 		this.mainCalculator = GameObject.Find ("Main Camera").GetComponent<GameManager> ().Calculator;
 		this.txtDate = this.gameObject.GetComponent<Text> ();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		var sDate = this.mainCalculator.ReferenceTime.ToString ("dddd d MMMM");
+		var sDate = this.mainCalculator.ReferenceTime.ToString ("HH:MM:ss");
 		this.txtDate.text = sDate;
 	}
 }
