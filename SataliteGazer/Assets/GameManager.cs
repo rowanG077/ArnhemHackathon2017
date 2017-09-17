@@ -17,9 +17,9 @@ public class GameManager : MonoBehaviour {
 	public float TimeMultiplicationFactor = 16;
 
 	private void UpdateSelf() {
-		var point = this.Calculator.GetCurrentCoordinates(this.DrawnSatalites.First().Script.TLeData);
+		var point = this.Calculator.GetMePosition(this.Calculator.ReferenceTime);
 
-		Vector3 selfLocation = new Vector3((float)point.SurfacePoint.x, (float)point.SurfacePoint.y, (float)point.SurfacePoint.z);
+		Vector3 selfLocation = new Vector3((float)point.x, (float)point.y, (float)point.z);
 		this.Self.transform.localPosition = selfLocation;
 	}
 
